@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MONÉA — Menú &amp; Ordenar · 14 pantallas</title>
+<style>
+:root{
+  --lila:#B69AB3;--lila-dark:#8B6A88;--lila-soft:#DFCEE1;
+  --burg:#5F6130;--green:#5F6130;--gold:#D5A875;--lavender:#DFCEE1;
+  --text:#302C35;--muted:#817A86;--line:#E5D9E3;--white:#fff;--bg:#FFFEFF
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#f4f1f6;overflow-x:hidden;color:var(--text);font-family:Arial,Helvetica,sans-serif}
+button,input,textarea,select{font:inherit}
+.app{max-width:1180px;min-height:100vh;margin:auto;background:var(--bg);box-shadow:0 0 30px rgba(60,40,70,.08);padding-bottom:82px}
+.screen{display:none;min-height:100vh}
+.screen.active{display:block}
+.header{height:74px;background:var(--lavender);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:sticky;top:0;z-index:20}
+.logo{width:100%;height:62px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#DFCEE1}.logo img{max-width:170px;width:auto;height:auto;max-height:54px;display:block}
+.icon{width:40px;height:40px;border:0;border-radius:50%;background:var(--lila-soft);color:var(--green);display:grid;place-items:center;cursor:pointer;font-size:22px}
+.cart-icon{font-size:13px;font-weight:800}
+.hero{background:var(--lila-soft);padding:28px 20px 25px}
+.hero h1{font:700 34px Georgia,serif;color:var(--green);margin:5px 0 8px}
+.hero p{font-size:14px;line-height:1.5;color:#63596b;margin:0}
+.hero-art{height:210px;border-radius:24px;background:#fff;margin-top:20px;display:grid;place-items:center;color:#aa98b7;font-size:11px;letter-spacing:1px}
+.container{padding:22px 16px}
+.kicker{font-size:10px;letter-spacing:2px;font-weight:800;color:var(--lila-dark);text-transform:uppercase}
+h1.page{font:700 31px Georgia,serif;color:var(--green);margin:7px 0 5px}
+.sub{font-size:13px;color:var(--muted);line-height:1.5;margin:0 0 18px}
+.btn{border:0;border-radius:15px;padding:14px 17px;font-weight:800;cursor:pointer}
+.btn.primary{background:var(--green);color:#fff}
+.btn.lila{background:var(--lila);color:#fff}
+.btn.outline{background:#fff;color:var(--green);border:1px solid var(--line)}
+.full{width:100%}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:5px 0 13px}
+.section-title strong{font-size:17px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.category{border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;cursor:pointer}
+.cat-img{height:132px;background:var(--lila-soft);display:grid;place-items:center;color:#a492b3;font-size:9px;letter-spacing:1px}
+.category .copy{padding:12px}.category h3{font-size:14px;margin:0 0 5px;color:var(--green)}.category p{font-size:11px;color:var(--muted);line-height:1.4;margin:0}
+.filters{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;overflow-y:hidden;padding:2px 2px 16px;scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:pan-x;scroll-snap-type:x proximity}.filters::-webkit-scrollbar{display:none}.filter{flex:0 0 auto;scroll-snap-align:start}
+.filter{white-space:nowrap;border:1px solid var(--line);background:#fff;color:#766c7c;border-radius:99px;padding:9px 13px;font-size:11px;font-weight:700}.filter.active{background:var(--lila);color:#fff;border-color:var(--lila)}
+.product{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 6px 18px rgba(75,45,90,.05)}
+.product-img{height:auto;aspect-ratio:1/1;background:var(--lila-soft);display:grid;place-items:center;color:#a492b3;font-size:9px;letter-spacing:1px;position:relative}
+.product-img>img,.detail-img>img{width:100%;height:100%;object-fit:contain;display:block}.combo-img img,.surprise-img img,.event-img img{width:100%;height:100%;object-fit:cover;display:block}
+.product-img>img{border-radius:0}
+.detail-img{overflow:hidden}.heart{position:absolute;right:10px;top:10px;width:30px;height:30px;border:0;border-radius:50%;background:#fff;color:var(--green)}
+.product-body{padding:12px}.product h3{font-size:14px;margin:0 0 5px;color:var(--green)}.product p{font-size:11px;line-height:1.4;color:var(--muted);min-height:31px;margin:0 0 8px}.prices{font-size:11px;color:#665b6b;line-height:1.6}.prices b{color:var(--green)}
+.add{width:100%;margin-top:10px;background:var(--green);color:#fff;border:0;border-radius:12px;padding:10px;font-size:12px;font-weight:800;cursor:pointer}
+.category-row{display:flex;gap:14px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:20px;background:#fff;margin-bottom:12px;cursor:pointer}.category-row .cat-img{width:92px;height:78px;border-radius:15px;flex:none}.category-row h3{margin:0 0 5px;color:var(--green);font-size:15px}.category-row p{margin:0;color:var(--muted);font-size:11px;line-height:1.4}.arrow{margin-left:auto;color:var(--lila-dark);font-size:22px}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:14px;box-shadow:0 5px 18px rgba(75,45,90,.04)}
+.option-label{font-size:12px;font-weight:800;margin-bottom:8px;display:block;color:var(--green)}
+.options{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:15px}.opt{border:1px solid var(--line);background:#fff;color:#6f6675;border-radius:12px;padding:9px 10px;font-size:11px;cursor:pointer}.opt.selected{background:var(--lila-soft);border-color:var(--lila);color:var(--green);font-weight:800}
+.detail-img{height:260px;border-radius:24px;background:var(--lila-soft);display:grid;place-items:center;color:#a492b3;font-size:10px;letter-spacing:1px;margin-bottom:16px}
+.qty{display:flex;align-items:center;gap:10px}.qty button{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--green);font-size:18px}.qty span{font-weight:800}
+.big-price{font-size:22px;font-weight:800;color:var(--green);margin:12px 0}
+.surprise-open{display:block;width:100%;padding:0;border:0;background:transparent;text-align:left;cursor:pointer;border-radius:22px;-webkit-tap-highlight-color:transparent}.surprise-open:focus-visible{outline:2px solid var(--lila-dark);outline-offset:3px}.surprise-open .surprise-img{margin-bottom:14px}.surprise-open img{pointer-events:auto;cursor:zoom-in}
+.combo-img,.surprise-img,.event-img{height:205px;border-radius:22px;background:var(--lila-soft);display:grid;place-items:center;color:#a492b3;font-size:10px;letter-spacing:1px;margin-bottom:14px}
+.tag{display:inline-block;background:var(--lila-soft);color:var(--lila-dark);padding:6px 9px;border-radius:99px;font-size:10px;font-weight:800;margin-bottom:7px}
+.price-big{font-size:19px;font-weight:800;color:var(--green);margin-top:8px}
+.form label{font-size:11px;font-weight:800;color:var(--green);display:block;margin:13px 0 6px}
+.form input,.form textarea,.form select{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px;background:#fff;color:var(--text);outline:none}
+.form textarea{min-height:90px;resize:vertical}
+.color-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.color{height:30px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);cursor:pointer}.color.sel{box-shadow:0 0 0 2px var(--burg)}
+.summary-box{background:var(--lila-soft);border-radius:16px;padding:13px;font-size:12px;line-height:1.55;margin-top:15px}
+.cart-item{display:flex;gap:12px}.cart-pic{width:78px;height:78px;flex:none;border-radius:16px;background:var(--lila-soft);display:grid;place-items:center;color:#a492b3;font-size:9px}.cart-info{flex:1}.cart-name{font-weight:800;font-size:14px}.cart-detail{font-size:11px;color:var(--muted);line-height:1.45;margin-top:4px}.cart-price{color:var(--green);font-weight:800;margin-top:5px}.cart-actions{display:flex;align-items:center;gap:8px;margin-top:8px}.cart-actions button{width:27px;height:27px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--green)}.remove{margin-left:auto;border:0!important;width:auto!important;color:#958b99!important;font-size:10px}
+.row{display:flex;justify-content:space-between;gap:10px;font-size:13px;margin:11px 0}.row.total{border-top:1px solid var(--line);padding-top:14px;font-size:18px;color:var(--green);font-weight:800}
+.notice{background:var(--lila-soft);border-radius:15px;padding:12px;font-size:11px;line-height:1.5;color:#665b6b}
+.home-grid{margin-top:20px}
+.home-cta{margin-top:18px}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:1180px;width:100%;height:70px;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);z-index:30}.bottom a{text-decoration:none;color:#8a818f;font-size:10px;text-align:center;padding-top:12px;font-weight:800;cursor:pointer}.bottom a.active{color:var(--green)}.bottom span{display:block;font-size:19px;line-height:20px;margin-bottom:3px}
+.nav-m{
+  display:block!important;
+  font:700 22px Georgia,serif!important;
+  line-height:22px!important;
+  color:var(--green);
+  margin-bottom:3px!important;
+}
+.nav-phone{
+  display:block!important;
+  width:18px;height:27px;
+  margin:0 auto 4px!important;
+  border:2px solid currentColor;
+  border-radius:5px;
+  position:relative;
+}
+.nav-phone:after{
+  content:"";
+  position:absolute;
+  left:5px;right:5px;bottom:3px;
+  height:2px;border-radius:2px;background:currentColor;
+}
+.nav-phone:before{
+  content:"";
+  position:absolute;
+  left:6px;top:3px;
+  width:4px;height:2px;border-radius:2px;background:currentColor;
+}
+.nav-cart{
+  display:block!important;
+  width:25px;height:18px;
+  margin:3px auto 8px!important;
+  border:2px solid currentColor;
+  border-top:0;
+  border-radius:2px 2px 6px 6px;
+  position:relative;
+  transform:skew(-6deg);
+}
+.nav-cart:before{
+  content:"";
+  position:absolute;
+  width:9px;height:2px;
+  left:-7px;top:-5px;
+  background:currentColor;
+  border-radius:2px;
+  box-shadow:3px 5px 0 -0.3px currentColor;
+}
+.nav-cart:after{
+  content:"";
+  position:absolute;
+  left:4px;bottom:-7px;
+  width:4px;height:4px;
+  border-radius:50%;
+  background:currentColor;
+  box-shadow:13px 0 0 currentColor;
+}
+
+.toast{position:fixed;left:50%;bottom:82px;transform:translateX(-50%);max-width:390px;width:calc(100% - 32px);background:var(--green);color:#fff;padding:13px 15px;border-radius:14px;text-align:center;font-size:12px;z-index:100;display:none}
+@media(min-width:700px){.app{margin:20px auto;border-radius:28px;overflow:hidden}}
+
+/* V7 — portada con fotos finales de MONÉA */
+.home-wrap{background:#fff;padding-bottom:92px}
+.home-hero-photo{margin:0 0 0;overflow:hidden;background:var(--lila-soft)}
+.home-hero-img{display:block;width:100%;height:235px;object-fit:cover;object-position:center}
+.home-intro{padding:22px 18px 8px;text-align:left}
+.home-kicker{font-size:9px;letter-spacing:2px;font-weight:800;color:var(--lila-dark);margin-bottom:8px}
+.home-intro h1{font:700 31px/1.02 Georgia,serif;color:var(--green);margin:0 0 9px}
+.home-intro p{font-size:13px;line-height:1.5;color:var(--muted);margin:0 0 16px}
+.home-section-head{padding:24px 18px 12px}
+.home-section-head.second{padding-top:30px}
+.home-section-head h2{font:700 22px/1.1 Georgia,serif;color:var(--green);margin:4px 0 0}
+.home-primary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:0 14px}
+.home-photo-card,.home-secondary-card{border:1px solid #e7dce8;background:#fff;padding:0;cursor:pointer;text-align:left;overflow:hidden;box-shadow:0 4px 14px rgba(110,46,77,.07)}
+.home-photo-card{border-radius:18px}
+.home-photo-card img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover}
+.home-photo-card span{display:block;padding:9px 8px 11px;font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.2px}
+.home-secondary-scroll{display:flex;gap:10px;overflow-x:auto;padding:0 14px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.home-secondary-scroll::-webkit-scrollbar{display:none}
+.home-secondary-card{flex:0 0 145px;border-radius:17px}
+.home-secondary-card img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover}
+.home-secondary-card span{display:block;padding:8px 9px 10px;font-size:11px;font-weight:800;color:var(--green)}
+.home-photo-card:active,.home-secondary-card:active{transform:scale(.985)}
+@media(min-width:700px){.home-hero-img{height:320px}.home-primary-grid{gap:12px}.home-secondary-card{flex-basis:165px}}
+
+.photo-missing{font-size:10px;letter-spacing:.8px;color:#a492b3;text-align:center;padding:10px}
+.cat-img img,.combo-img img,.surprise-img img,.event-img img,.cart-pic img{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
+.category-row .cat-img img{border-radius:15px}
+@media (min-width:700px){.signature-grid,.combo-grid,.surprise-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}}
+@media (min-width:1000px){.signature-grid,.combo-grid,.surprise-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}}
+
+.home-clean{min-height:calc(100vh - 70px);padding:28px 18px 110px;background:#fff}.home-clean-intro{max-width:760px;margin:0 auto;text-align:center;padding:26px 10px 20px}.home-clean-kicker{font-size:10px;letter-spacing:2.5px;font-weight:800;color:#5F6130;margin-bottom:16px}.home-clean-intro h1{font-family:"Bodoni 72","Didot","Bodoni MT","Times New Roman",serif;font-size:clamp(38px,7vw,68px);line-height:.98;color:#5F6130;margin:0 0 16px;font-weight:600}.home-clean-intro h1 em{font-style:italic;color:#5F6130}.home-clean-intro p{max-width:500px;margin:0 auto 22px;color:#756d70;font-size:14px;line-height:1.55}.home-menu-btn{width:min(100%,250px);margin:auto}.home-clean-divider{width:52px;height:2px;background:#D5A875;margin:4px auto 28px}.home-clean-title{text-align:center;margin-bottom:16px}.home-clean-title span{font-size:9px;letter-spacing:2.2px;font-weight:800;color:#B69AB3}.home-clean-title h2{font-family:"Bodoni 72","Didot","Bodoni MT","Times New Roman",serif;color:#5F6130;font-size:28px;margin:5px 0 0;font-weight:600}.home-clean-grid{max-width:980px;margin:0 auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.home-clean-card{position:relative;text-align:left;background:#fff;border:1px solid #e8dfe7;border-radius:18px;padding:18px 42px 17px 18px;min-height:105px;box-shadow:0 5px 18px rgba(110,46,77,.06);cursor:pointer}.home-clean-card b{display:block;font-family:"Bodoni 72","Didot","Bodoni MT","Times New Roman",serif;font-size:19px;color:#5F6130;margin-bottom:6px;font-weight:600}.home-clean-card span{display:block;color:#756d70;font-size:11px;line-height:1.45;max-width:270px}.home-clean-card i{position:absolute;right:17px;top:50%;transform:translateY(-50%);font-style:normal;font-size:20px;color:#D5A875}.home-clean-card.wide{grid-column:1/-1}.home-clean-footer{text-align:center;margin:28px auto 0;font-size:8px;letter-spacing:2px;color:#b4aaad}@media(max-width:620px){.home-clean{padding:18px 14px 105px}.home-clean-intro{padding:24px 8px 18px}.home-clean-intro h1{font-size:39px}.home-clean-intro p{font-size:13px}.home-clean-grid{grid-template-columns:1fr;gap:9px}.home-clean-card{min-height:88px;padding:16px 40px 15px 16px}.home-clean-card.wide{grid-column:auto}.home-clean-card b{font-size:18px}.home-clean-title h2{font-size:25px}}@media(min-width:900px){.home-clean{padding-top:42px}.home-clean-grid{gap:14px}.home-clean-card{min-height:118px;padding:23px 50px 21px 22px}.home-clean-card b{font-size:22px}.home-clean-card span{font-size:12px}}
+
+
+.combo-builder{max-width:760px;margin:0 auto}.combo-choice{display:grid;grid-template-columns:1fr 110px;gap:8px;margin:12px 0}.combo-choice label{grid-column:1/-1;font-weight:800;color:var(--green);font-size:12px}.combo-choice select{width:100%;border:1px solid #dfd4df;border-radius:12px;padding:12px;background:#fff;font:inherit}.combo-crowns{margin-top:10px}.btn.secondary{background:#fff;color:var(--green);border:1px solid #d9c7d4;margin-top:9px}@media(max-width:520px){.combo-choice{grid-template-columns:1fr 95px}}
+
+.home-clean-hero{margin:0 -18px 24px;overflow:hidden;border-radius:0 0 28px 28px;background:var(--lila-soft)}
+.home-clean-hero .home-hero-img{display:block;width:100%;height:clamp(250px,42vw,430px);object-fit:cover;object-position:center}
+@media(min-width:700px){.home-clean-hero{margin:0 -28px 30px;border-radius:0 0 32px 32px}.home-clean-hero .home-hero-img{height:390px}}
+
+/* MONÉA responsive image + brand audit */
+img{max-width:100%;}
+.product-img img,.combo-img img,.surprise-img img,.event-img img,.cat-img img{display:block;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
+.detail-img img{display:block;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
+.product-img,.combo-img,.surprise-img,.event-img{overflow:hidden;}
+@media(max-width:699px){
+  .app{width:100%;max-width:none;margin:0;border-radius:0;}
+  .screen{min-height:100dvh;}
+  .container{width:100%;max-width:none;padding-left:14px;padding-right:14px;}
+  .grid2{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  .product-img{height:clamp(150px,42vw,205px);}
+  .combo-img,.surprise-img,.event-img{height:clamp(180px,54vw,250px);}
+  .detail-img{height:clamp(260px,76vw,380px);}
+  .home-clean-hero{margin-left:-14px;margin-right:-14px;}
+}
+@media(min-width:700px){
+  .app{width:min(1180px,calc(100vw - 40px));}
+  .container{max-width:1120px;margin:0 auto;}
+  .grid2{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}
+  .product-img{height:230px;}
+  .combo-img,.surprise-img,.event-img{height:250px;}
+}
+@media(min-width:1050px){
+  .grid2{grid-template-columns:repeat(4,minmax(0,1fr));}
+  .product-img{height:245px;}
+}
+
+/* MONÉA logo: preserve full artwork and unify its lilac field */
+.logo{display:flex;align-items:center;justify-content:center;min-width:0;background:#DFCEE1;border-radius:14px;overflow:hidden;}
+.logo img{display:block;width:auto;max-width:100%;height:auto;max-height:48px;object-fit:contain;object-position:center;}
+@media(max-width:699px){.logo{max-width:180px;height:50px}.logo img{max-height:44px}}
+@media(min-width:700px){.logo{max-width:230px;height:54px}.logo img{max-height:48px}}
+
+.product-img,.detail-img,.combo-img,.surprise-img,.event-img,.cat-img{background:#DFCEE1;overflow:hidden;}
+.product-img img,.detail-img img,.combo-img img,.surprise-img img,.event-img img,.cat-img img,.cart-pic img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+.surprise-card{cursor:pointer}.surprise-card .surprise-img{overflow:hidden}.surprise-card .surprise-img img{transition:transform .2s ease}.surprise-card:hover .surprise-img img{transform:scale(1.02)}
+</style>
+
+<style id="monea-v9-audit">
+/* V9 — PORTADA CENTRADA + TIPOGRAFÍA MONÉA */
+.home-intro{text-align:center;max-width:360px;margin:0 auto}
+.home-intro .btn{max-width:320px;margin:4px auto 0}
+.home-categories-clean{margin-top:26px}
+.home-categories-clean .clean-title{text-align:center}
+.home-categories-clean .clean-title > div{width:100%}
+.home-categories-clean .clean-title .kicker{letter-spacing:2.4px;font-size:10px}
+.home-categories-clean .clean-title h2{font-family:"Bodoni 72","Didot","Bodoni MT","Times New Roman",serif;font-weight:600;letter-spacing:.2px;color:#5F6130;margin:4px 0 0;font-size:28px}
+.clean-grid-main,.clean-grid-secondary{gap:12px}
+.clean-card{align-items:center;text-align:center;justify-content:center;min-height:128px;padding:19px 14px;border-radius:22px;box-shadow:0 5px 18px rgba(110,46,77,.055);border-color:rgba(110,46,77,.13)}
+.clean-card.featured{background:linear-gradient(160deg,#faf5fa 0%,#fff 100%)}
+.clean-card .clean-name{font-family:"Bodoni 72","Didot","Bodoni MT","Times New Roman",serif;font-size:23px;line-height:1.05;font-weight:600;letter-spacing:.1px}
+.clean-card .clean-copy{font-family:"Avenir Next","Helvetica Neue",Arial,sans-serif;font-size:12px;line-height:1.45;color:#756d76;margin:8px auto 0;max-width:155px}
+.clean-card .clean-arrow{align-self:center;color:#B69AB3;font-size:17px;margin-top:10px;font-weight:400}
+.clean-card.small{min-height:108px;padding:17px 12px;border-radius:20px}
+.clean-card.small .clean-name{font-size:19px}
+.clean-card.small .clean-copy{font-size:11.5px;max-width:145px}
+.clean-card.small .clean-arrow{font-size:15px;margin-top:8px}
+.clean-highlight{margin-top:12px;min-height:104px;justify-content:center;text-align:center;padding:18px 22px;border-radius:22px}
+.clean-highlight > div:first-child{display:flex;flex-direction:column;align-items:center}
+.clean-highlight .clean-name{font-family:"Bodoni 72","Didot","Bodoni MT","Times New Roman",serif;font-size:23px;font-weight:600}
+.clean-highlight .clean-copy{font-family:"Avenir Next","Helvetica Neue",Arial,sans-serif;font-size:12px;max-width:260px;margin:6px auto 0}
+.clean-highlight .clean-arrow{display:none}
+@media(max-width:380px){
+  .clean-card .clean-name{font-size:21px}
+  .clean-card.small .clean-name{font-size:18px}
+}
+</style>
+
+
+<style id="monea-responsive-v12">
+/* V12 — MONÉA responsive real: celular + tablet + computador */
+html,body{width:100%;min-width:0;overflow-x:hidden}
+body{background:#f4f1f6}
+.app{width:100%;max-width:1180px;min-height:100vh;margin:0 auto;background:var(--bg);box-shadow:none}
+.screen{width:100%;min-height:100vh;overflow-x:hidden}
+.header{height:76px;padding:0 clamp(16px,3vw,36px);position:sticky;top:0}
+.logo{width:150px;height:64px;background:#DFCEE1}.logo img{max-width:150px;max-height:62px;width:auto;height:auto;object-fit:contain}
+.container{width:100%;max-width:1120px;margin:0 auto;padding:28px clamp(16px,3vw,40px) 110px}
+.grid2{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.product-img{height:240px}
+.product-body{padding:16px}.product h3{font-size:16px}.product p{font-size:13px}.prices{font-size:12px}.add{padding:12px;font-size:12px}
+.detail-img{height:min(520px,52vw);min-height:300px;max-height:520px}
+.menu-filters{max-width:100%;overflow-x:auto}
+.filters{padding-bottom:18px}
+.bottom{max-width:1180px;height:76px}
+.bottom a{padding-top:13px;font-size:11px}
+.home-wrap{padding-bottom:105px}
+.home-hero-img{height:clamp(280px,38vw,470px)}
+.home-intro{max-width:760px;padding:30px 24px 10px}
+.home-intro h1{font-size:clamp(31px,4vw,48px)}
+.home-intro p{font-size:15px}
+.home-primary-grid{max-width:1120px;margin:0 auto;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;padding:0 clamp(16px,3vw,40px)}
+.home-secondary-scroll{max-width:1120px;margin:0 auto;padding-left:clamp(16px,3vw,40px);padding-right:clamp(16px,3vw,40px)}
+.home-section-head{max-width:1120px;margin:0 auto;padding-left:clamp(16px,3vw,40px);padding-right:clamp(16px,3vw,40px)}
+.category-row{padding:18px;min-height:110px}.category-row .cat-img{width:110px;height:88px}
+.card{padding:20px}
+.combo-img,.surprise-img,.event-img{height:280px}
+.toast{max-width:520px}
+@media (max-width:699px){
+  body{background:#fff}
+  .app{max-width:none}
+  .header{height:70px}
+  .container{padding:22px 14px 100px}
+  .grid2{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .product-img{height:170px}
+  .product-body{padding:11px}.product h3{font-size:13px}.product p{font-size:11px;min-height:0}.prices{font-size:11px}
+  .detail-img{height:330px;min-height:0}
+  .home-primary-grid{gap:9px;padding:0 12px}
+  .home-section-head{padding-left:14px;padding-right:14px}
+  .category-row .cat-img{width:82px;height:70px}
+  .combo-img,.surprise-img,.event-img{height:210px}
+}
+@media (min-width:700px) and (max-width:999px){
+  .grid2{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .product-img{height:220px}
+  .home-primary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (min-width:1000px){
+  .grid2{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+  .product-img{height:260px}
+  .home-primary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .home-photo-card span{font-size:12px;padding:11px 12px 13px}
+  .category-row{min-height:125px}
+}
+</style>
+<style id="monea-final-audit">
+/* FINAL MONÉA BRAND + RESPONSIVE OVERRIDES */
+*,*::before,*::after{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
+body{background:#f8f5f8}
+.btn.primary,.add{background:var(--lila)!important;color:#fff!important}
+.btn.primary:hover,.add:hover{background:var(--lila-dark)!important}
+.btn.lila,.filter.active{background:var(--lila)!important;color:#fff!important;border-color:var(--lila)!important}
+.header{background:var(--lila-soft)}
+.bottom a.active{color:var(--lila-dark)}
+.toast{background:var(--green)}
+.home-clean-intro h1{color:var(--lila-dark)!important}
+.home-clean-intro h1 em{color:var(--green)!important}
+.home-clean-title h2,.home-clean-card b,h1.page,.product h3,.category h3,.category-row h3,.section-title strong{color:var(--green)!important}
+.home-clean-kicker,.home-clean-title span,.kicker{color:var(--lila-dark)!important}
+.home-clean-divider{background:var(--green)}
+.home-clean-card i,.arrow{color:var(--lila-dark)!important}
+.product-img img,.detail-img img,.combo-img img,.surprise-img img,.event-img img,.cat-img img{display:block;width:100%;height:100%;object-fit:cover}
+.product-img,.detail-img,.combo-img,.surprise-img,.event-img,.cat-img{overflow:hidden}
+@media(max-width:699px){
+  .app{width:100%;max-width:none;margin:0;border-radius:0;box-shadow:none}
+  .container{width:100%;max-width:none;padding-left:14px;padding-right:14px}
+  .screen{width:100%;min-height:100dvh}
+  .grid2{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .product-img{height:clamp(150px,42vw,205px)}
+  .combo-img,.surprise-img,.event-img{height:clamp(180px,54vw,250px)}
+  .detail-img{height:clamp(260px,76vw,380px)}
+  .home-clean-hero{margin-left:-14px;margin-right:-14px}
+  .home-hero-img{width:100%;height:clamp(250px,72vw,360px);object-fit:cover}
+}
+@media(min-width:700px){
+  .app{width:min(1180px,calc(100vw - 40px));margin:20px auto}
+  .container{width:100%;max-width:1120px;margin:0 auto}
+  .grid2{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+  .product-img{height:230px}
+  .combo-img,.surprise-img,.event-img{height:250px}
+}
+@media(min-width:1050px){
+  .grid2{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+  .product-img{height:245px}
+}
+
+img{max-width:100%;}
+img[src^="data:image"]{background:#fff;}
+</style>
+<style id="monea-image-display-v22">
+/* V22 — Mostrar fotografías completas, sin recortes */
+.product-img,.detail-img,.combo-img,.surprise-img,.event-img,.cat-img,.cart-pic{
+  background:#DFCEE1; overflow:hidden;
+}
+.product-img img,.detail-img img,.combo-img img,.surprise-img img,.event-img img,.cat-img img,.cart-pic img{
+  width:100%;height:100%;display:block;
+  object-fit:contain !important;
+  object-position:center center !important;
+}
+.product-img{min-height:190px;}
+.combo-img,.surprise-img,.event-img{min-height:260px;}
+.detail-img{min-height:300px;}
+.image-clickable{cursor:zoom-in;}
+.image-clickable::after{content:'Ver foto completa';position:absolute;right:10px;bottom:10px;background:rgba(255,255,255,.92);color:#6E2E4D;border-radius:999px;padding:6px 9px;font-size:10px;font-weight:800;letter-spacing:.2px;box-shadow:0 3px 10px rgba(50,30,50,.12);pointer-events:none;}
+@media(max-width:699px){
+  .product-img{height:190px;min-height:190px;}
+  .combo-img,.surprise-img,.event-img{height:245px;min-height:245px;}
+  .detail-img{height:360px;min-height:360px;}
+}
+@media(min-width:700px){
+  .product-img{height:280px;min-height:280px;}
+  .combo-img,.surprise-img,.event-img{height:330px;min-height:330px;}
+  .detail-img{height:520px;min-height:420px;}
+}
+#moneaLightboxV22{position:fixed;inset:0;z-index:99999;background:rgba(35,28,38,.92);display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out;}
+#moneaLightboxV22.open{display:flex;}
+#moneaLightboxV22 img{max-width:96vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:16px;box-shadow:0 12px 45px rgba(0,0,0,.35);background:#DFCEE1;}
+#moneaLightboxV22 button{position:absolute;top:16px;right:16px;width:42px;height:42px;border:0;border-radius:50%;background:#fff;color:#6E2E4D;font-size:25px;line-height:1;cursor:pointer;}
+#moneaLightboxV22 .lb-label{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.95);color:#5F6130;border-radius:999px;padding:8px 14px;font-size:12px;font-weight:800;max-width:90vw;text-align:center;}
+</style>
+
+<style id="monea-v25-visual-correction">
+/* V25 final visual correction: preserve complete product photos */
+.product-img>img,.detail-img>img{object-fit:contain !important;}
+.signature-grid,.combo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.signature-grid .card,.combo-grid .card{margin-bottom:0;}
+.combo-img img{object-fit:contain !important;background:#fff;}
+@media(min-width:700px){.signature-grid,.combo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;}}
+@media(min-width:1000px){.signature-grid,.combo-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}}
+</style>
+
+<style id="monea-v26-final-overrides">
+.signature-grid,.combo-grid,.surprise-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.signature-grid .card,.combo-grid .card,.surprise-grid .card{min-width:0}
+.signature-grid .combo-img,.combo-grid .combo-img{width:100%;height:220px;min-height:220px;background:#DFCEE1;overflow:hidden;border-radius:22px;display:block}
+.signature-grid .combo-img img,.combo-grid .combo-img img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;opacity:1!important;visibility:visible!important}
+@media(min-width:900px){.signature-grid,.combo-grid,.surprise-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.signature-grid .combo-img,.combo-grid .combo-img{height:250px;min-height:250px}}
+
+/* MONÉA · ajuste móvil final */
+@media (max-width:699px){
+  html,body{width:100%;max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;}
+  body{margin:0;background:#fff;}
+  .app{width:100%;max-width:100%;margin:0;border-radius:0;box-shadow:none;overflow:hidden;}
+  .screen{width:100%;min-height:100dvh;overflow-x:hidden;}
+  .header{min-height:64px;padding:8px 12px;gap:8px;}
+  .header .icon{width:38px;height:38px;min-width:38px;}
+  .logo{max-width:170px;height:46px;margin:auto;}
+  .logo img{max-width:100%;max-height:42px;width:auto;height:auto;object-fit:contain;}
+  .container{width:100%;padding-left:14px;padding-right:14px;overflow-x:hidden;}
+  .product-grid,.grid2,.signature-grid,.combo-grid,.surprise-grid{width:100%;max-width:100%;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+  .product{min-width:0;overflow:hidden;border-radius:16px;}
+  .product-img,.combo-img,.surprise-img,.cat-img{width:100%;height:170px;min-height:170px;overflow:hidden;}
+  .product-img img,.combo-img img,.surprise-img img,.cat-img img{width:100%;height:100%;object-fit:cover;display:block;}
+  .product-body{padding:10px;}
+  .product h3{font-size:13px;line-height:1.25;margin-bottom:5px;}
+  .product p{font-size:10px;line-height:1.35;}
+  .prices{font-size:10px;line-height:1.5;}
+  .add,.btn{min-height:40px;}
+  .bottom{height:64px;}
+  .bottom a{padding-top:9px;}
+  #moneaLightboxV22{padding:12px;}
+  #moneaLightboxV22 img{max-width:94vw;max-height:82vh;width:auto;height:auto;object-fit:contain;}
+  #moneaLightboxV22 button{top:10px;right:10px;}
+}
+@media (max-width:380px){
+  .product-grid,.grid2,.signature-grid,.combo-grid,.surprise-grid{gap:7px;}
+  .product-img,.combo-img,.surprise-img,.cat-img{height:145px;min-height:145px;}
+  .product-body{padding:8px;}
+  .product h3{font-size:12px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<!-- 1 INICIO -->
+<section class="screen active" id="s1"><header class="header"><button class="icon" onclick="go('s1')">≡</button><div class="logo"><img alt="MONÉA" src="assets/img_001_32444b8839.webp"/></div><button class="icon cart-icon" id="cartCount1" onclick="go('s13')">0</button></header>
+<div class="home-wrap home-clean">
+  <div class="home-hero-photo home-clean-hero">
+    <img alt="MONÉA Drinks &amp; Crowns" class="home-hero-img" src="assets/img_002_f0b490f1c8.jpg"/>
+  </div>
+  <div class="home-clean-intro">
+    <div class="home-clean-kicker">MONÉA · DRINKS & CROWNS</div>
+    <h1>Algo delicioso<br><em>te está esperando.</em></h1>
+    <p>Elige tu bebida, arma tu combinación o sorprende a alguien especial.</p>
+    <button class="btn primary home-menu-btn" onclick="go('s2')">VER MENÚ</button>
+  </div>
+  <div class="home-clean-divider"></div>
+  <div class="home-clean-title"><span>DESCUBRE MONÉA</span><h2>¿Qué se te antoja hoy?</h2></div>
+  <div class="home-clean-grid">
+    <button class="home-clean-card" onclick="go('s14')"><b>Bomba de Matcha</b><span>Matcha con soda, frío y refrescante.</span><i>→</i></button>
+    <button class="home-clean-card" onclick="go('s3')"><b>Matcha</b><span>Cremoso, fresco y lleno de sabor.</span><i>→</i></button>
+    <button class="home-clean-card" onclick="go('s5')"><b>Café Frío</b><span>Tu café favorito, en versión fría.</span><i>→</i></button>
+    <button class="home-clean-card" onclick="go('s6')"><b>Sodas</b><span>Frutales, refrescantes y únicas.</span><i>→</i></button>
+    <button class="home-clean-card" onclick="go('s8')"><b>Signature</b><span>Bebida + Crown en una sola experiencia.</span><i>→</i></button>
+    <button class="home-clean-card" onclick="go('s7')"><b>Crowns</b><span>El acompañamiento que corona tu bebida.</span><i>→</i></button>
+    <button class="home-clean-card" onclick="go('s9')"><b>Combos</b><span>Elige tus bebidas y tus Crowns.</span><i>→</i></button>
+    <button class="home-clean-card" onclick="go('s10')"><b>Surprises</b><span>Detalles para regalar, celebrar o sorprender.</span><i>→</i></button>
+    <button class="home-clean-card wide" onclick="go('s12')"><b>Eventos</b><span>Llevamos MONÉA a tus celebraciones.</span><i>→</i></button>
+  </div>
+  <div class="home-clean-footer">MONÉA · HECHO PARA DISFRUTAR</div>
+</div>
+<nav class="bottom"><a aria-label="Inicio" onclick="go('s1')"><span class="nav-m">M</span>Inicio</a><a aria-label="Menú" onclick="go('s2')"><span class="nav-phone"></span>Menú</a><a aria-label="Pedido" onclick="go('s13')"><span class="nav-cart"></span>Pedido</a></nav>
+<div class="toast" id="toast"></div>
+</section>
+<!-- 2 MENU -->
+<section class="screen" id="s2">
+<header class="header"><button class="icon" onclick="go('s1')">‹</button><div class="logo"><img alt="MONÉA" src="assets/img_001_32444b8839.webp"/></div><button class="icon cart-icon" id="cartCount2" onclick="go('s13')">0</button></header>
+<div class="container"><div class="kicker">DESCUBRE MONÉA</div><h1 class="page">Menú</h1><p class="sub">Elige lo que quieres disfrutar hoy.</p>
+<div aria-label="Categorías del menú" class="filters menu-filters">
+<button class="filter active" data-target="all">Todos</button>
+<button class="filter" data-target="s14">Bomba de Matcha</button>
+<button class="filter" data-target="s3">Matcha</button>
+<button class="filter" data-target="s5">Café Frío</button>
+<button class="filter" data-target="s6">Sodas</button>
+<button class="filter" data-target="s8">Signature</button>
+<button class="filter" data-target="s7">Crowns</button>
+<button class="filter" data-target="s9">Combos</button>
+<button class="filter" data-target="s10">Surprises</button>
+</div>
+<div id="menuCats"></div></div></section>
+<!-- 3 MATCHA -->
+<section class="screen" id="s3">
+<header class="header"><button class="icon" onclick="go('s2')">‹</button><div class="logo"><img alt="MONÉA" src="assets/img_001_32444b8839.webp"/></div><button class="icon cart-icon" id="cartCount3" onclick="go('s13')">0</button></header>
+<div class="container"><div class="kicker">MATCHA</div><h1 class="page">Matcha</h1><p class="sub">Bebidas frescas, cremosas y llenas de sabor.</p><div class="filters"><button class="filter active">Todos</button><button class="filter">Clásicos</button><button class="filter">Frutales</button><button class="filter">Especiales</button></div><div class="grid2" id="matchaGrid"></div></div></section>
+<!-- 4 DETALLE -->
+<section class="screen" id="s4">
+<header class="header"><button class="icon" onclick="go('s3')">‹</button><div class="logo"><img alt="MONÉA" src="assets/img_001_32444b8839.webp"/></div><button class="icon cart-icon" id="cartCount4" onclick="go('s13')">0</button></header>
+<div class="container" id="detailBox"></div></section>
+<!-- 5 CAFÉ FRÍO -->
+<section class="screen" id="s5">
+<header class="header"><button class="icon" onclick="go('s2')">‹</button><div class="logo"><img alt="MONÉA" src="assets/img_001_32444b8839.webp"/></div><button class="icon cart-icon" id="cartCount5" onclick="go('s13')">0</button></header>
+<div class="container"><div class="kicker">CAFÉ FRÍO</div><h1 class="page">Café frío</h1><p class="sub">Tu café favorito en versión fría.</p><div class="filters"><button class="filter active">Todos</button><button class="filter">Clásicos</button><button class="filter">Especiales</button></div><div class="grid2" id="coffeeGrid"></div></div></section>
+<!-- 6 SODAS -->
+<section class="screen" id="s6">
+<header class="header"><button class="icon" onclick="go('s2')">‹</button><div class="logo"><img alt="MONÉA" src="assets/img_001_32444b8839.webp"/></div><button class="icon cart-icon" id="cartCount6" onclick="go('s13')">0</button></header>
+<div class="container"><div class="kicker">SODAS</div><h1 class="page">Sodas</h1><p class="sub">Frutales, refrescantes y únicas.</p><div class="grid2" id="sodaGrid"></div></div></section>
+<!-- 7 CROWNS -->
+<section class="screen" id="s7">
+<header class="header"><button class="icon" onclick="go('s2')">‹</button><div class="logo"><img alt="MONÉA" src="assets/img_001_32444b8839.webp"/></div><button class="icon cart-icon" id="cartCount7" onclick="go('s13')">0</button></header>
+<div class="container"><div class="kicker">CROWNS</div><h1 class="page">Crowns</h1><p class="sub">Postres irresistibles para acompañar.</p><div id="crownsGrid"></div></div></section>
+<!-- 8 SIGNATURE -->
+<section class="screen" id="s8">
+<header class="header"><button class="icon" onclick="go('s2')">‹</button><div class="logo"><img alt="MONÉA" src="assets/img_001_32444b8839.webp"/></div><button class="icon cart-icon" id="cartCount8" onclick="go('s13')">0</button></header>
+<div class="container"><div class="kicker">SIGNATURE</div><h1 class="page">Signature</h1><p class="sub">Nuestras combinaciones de bebida + Crown.</p><div id="signatureGrid" class="signature-grid"></div></div></section>
+<!-- 9 COMBOS -->
+<section class="screen" id="s9">
+<header class="header"><button class="icon" onclick="go('s2')">‹</button><div class="logo"><img alt="MONÉA" src="assets/img_001_32444b8839.webp"/></div><button class="icon cart-icon" id="cartCount9" onclick="go('s13')">0</button></header>
+<div class="container"><div class="kicker">COMBOS</div><h1 class="page">Combos</h1><p class="sub">Tu bebida + Crowns para compartir.</p><div id="comboGrid" class="combo-grid"></div></div></section>
+<!-- 10 SURPRISES -->
+<section class="screen" id="s10">
+<header class="header"><button class="icon" onclick="go('s2')">‹</button><div class="logo"><img alt="MONÉA" src="assets/img_001_32444b8839.webp"/></div><button class="icon cart-icon" id="cartCount10" onclick="go('s13')">0</button></header>
+<div class="container"><div class="kicker">SURPRISES</div><h1 class="page">Un detalle para cada ocasión</h1><p class="sub">Elige tu Surprise y personalízala en el siguiente paso.</p><div id="surpriseGrid"></div></div></section>
+<!-- 11 PERSONALIZA SURPRISE -->
+<section class="screen" id="s11">
+<header class="header"><button class="icon" onclick="go('s10')">‹</button><div class="logo"><img alt="MONÉA" src="assets/img_001_32444b8839.webp"/></div><button class="icon cart-icon" id="cartCount11" onclick="go('s13')">0</button></header>
+<div class="container" id="surpriseCustomize"></div></section>
+<!-- 12 EVENTOS -->
+<section class="screen" id="s12">
+<header class="header"><button class="icon" onclick="go('s1')">‹</button><div class="logo"><img alt="MONÉA" src="assets/img_001_32444b8839.webp"/></div><button class="icon cart-icon" id="cartCount12" onclick="go('s13')">0</button></header>
+<div class="container"><div class="kicker">MONÉA PARA TUS EVENTOS</div><h1 class="page">Eventos y celebraciones</h1><p class="sub">Creamos experiencias personalizadas para tus momentos especiales.</p>
+<div class="event-img"><img src="assets/img_003_cd5fac2042.jpg" alt="MONÉA Eventos"></div>
+<div class="card"><div class="section-title"><strong>Cuéntanos sobre tu evento</strong></div><div class="form">
+<label>Nombre</label><input placeholder="Tu nombre"/>
+<label>Tipo de evento</label><input placeholder="Cumpleaños, empresa, celebración..."/>
+<label>Fecha</label><input type="date"/>
+<label>Número de invitados</label><input min="1" placeholder="Ej. 30" type="number"/>
+<label>¿Qué necesitas?</label><textarea placeholder="Cuéntanos cómo podemos ayudarte."></textarea>
+<button class="btn primary full" onclick="sendEvent()" style="margin-top:15px">SOLICITAR INFORMACIÓN</button>
+</div></div></div></section>
+<!-- 14 BOMBA DE MATCHA -->
+<section class="screen" id="s14">
+<header class="header"><button class="icon" onclick="go('s2')">‹</button><div class="logo"><img alt="MONÉA" src="assets/img_001_32444b8839.webp"/></div><button class="icon cart-icon" id="cartCount14" onclick="go('s13')">0</button></header>
+<div class="container">
+<div class="kicker">BOMBA DE MATCHA</div>
+<h1 class="page">Bomba de Matcha</h1>
+<p class="sub">La versión con soda: fría, frutal y refrescante.</p>
+<div class="grid2" id="bombaGrid"></div>
+</div>
+</section>
+<!-- 13 CARRITO -->
+<section class="screen" id="s13">
+<header class="header"><button class="icon" onclick="go('s2')">‹</button><div class="logo"><img alt="MONÉA" src="assets/img_001_32444b8839.webp"/></div><button class="icon cart-icon" id="cartCount13">0</button></header>
+<div class="container"><div class="kicker">MONÉA · PEDIDO</div><h1 class="page">Tu pedido</h1><p class="sub">Revisa tus productos antes de generar el pedido.</p>
+<div id="cartItems"></div>
+<div class="card" id="cartSummary"></div>
+<div class="notice">Al generar el pedido, MONÉA abrirá WhatsApp con todos los productos y sus personalizaciones listos para enviar. Allí confirmaremos disponibilidad, domicilio y forma de pago.</div>
+<button class="btn primary full" onclick="sendOrder()" style="margin-top:12px">GENERAR PEDIDO POR WHATSAPP</button>
+</div></section>
+<nav class="bottom">
+<a aria-label="Inicio" onclick="go('s1')"><span class="nav-m">M</span>Inicio</a>
+<a aria-label="Menú" onclick="go('s2')"><span class="nav-phone"></span>Menú</a>
+<a aria-label="Pedido" onclick="go('s13')"><span class="nav-cart"></span>Pedido</a>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+/* WhatsApp MONÉA */
+const WHATSAPP_NUMBER="573153055929";
+const MATCHA_IMG={
+  matcha_fc:"assets/img_004_4cb8385d5f.webp",
+  matcha_pist:"assets/img_005_919999ab45.webp",
+  matcha_van:"assets/img_006_4d6d77d0b1.webp",
+  matcha_mango:"assets/img_007_26a19af696.webp",
+};
+
+
+const PHOTOS = {"matcha_fc":"assets/img_008_a1e3c3e7a1.webp","matcha_pist":"assets/img_009_53b5ab4425.webp","matcha_van":"assets/img_010_b06b34c87d.webp","matcha_mango":"assets/img_011_90185bd12a.webp","bomba_straw":"assets/img_012_cc06d26180.jpg","bomba_mango":"assets/img_013_dad0f6c9cc.jpg","bomba_blue":"assets/img_014_83d1e0951c.jpg","combo2":"assets/img_015_ae67d3a450.jpg","combo3":"assets/img_016_b71b550c66.jpg","surprise_mini":"assets/img_017_542659185f.jpg","surprise_classic":"assets/img_018_04280ab3b4.jpg","surprise_special":"assets/img_019_33905154b0.jpg","event":"assets/img_003_cd5fac2042.jpg","cat_matcha":"assets/img_020_95d0a7bc30.webp","cat_bomba":"assets/img_021_af9be8b5ae.webp","cat_coffee":"assets/img_022_dc59c47158.webp","cat_soda":"assets/img_023_03e89b89bc.webp","cat_crowns":"assets/img_024_f28bfcf514.webp","cat_signature":"assets/img_025_4f6a6edcd2.webp","cat_combos":"assets/img_026_f0e54c5b1a.jpg","cat_surprises":"assets/img_027_5dddf1cb0c.webp","cat_event":"assets/img_003_cd5fac2042.jpg","logo":"assets/img_028_925c1e0621.webp","coffee_van":"assets/img_029_c2d4390b6a.jpg","coffee_panela":"assets/img_030_60bf7aab68.jpg","coffee_original":"assets/img_031_6415600ba7.jpg","soda_mango":"assets/img_032_18f079a355.jpg","soda_red":"assets/img_033_5509034355.jpg","soda_tropical":"assets/img_034_fb6ce84774.jpg","croissant_sugar":"assets/img_035_abd25bbe68.webp","croissant_white":"assets/img_036_aad36e2619.webp","croissant_dark":"assets/img_037_b609813d1f.webp","croissant_pist":"assets/img_038_004065b4a4.webp","croissant_straw":"assets/img_039_f23f85b9d3.webp","brownie_classic":"assets/img_040_19cafb6fa2.webp","brownie_dark":"assets/img_041_1ae12ac1e7.webp","brownie_white":"assets/img_042_67bb7f3352.webp","brownie_pist":"assets/img_043_3910d826d7.webp","waffle_suero":"assets/img_044_6faab18c9c.webp","waffle_arequipe":"assets/img_045_d1415c3b96.webp","waffle_guava":"assets/img_046_b9671f62f0.webp","waffle_pist":"assets/img_047_c643bf192b.webp","skewer_tropical":"assets/img_048_a0b18d8609.jpg","skewer_red":"assets/img_048_a0b18d8609.jpg","skewer_mix":"assets/img_048_a0b18d8609.jpg","sig_soda_mango":"assets/img_049_ffe85a2a03.jpg","sig_soda_red":"assets/img_050_af28f0a890.jpg","sig_matcha_fc":"assets/img_051_acfa683662.jpg","sig_matcha_mango":"assets/img_052_a091158a9f.webp","sig_coffee_panela":"assets/img_053_c16ff1ebfd.jpg","sig_coffee_van":"assets/img_054_ccddc3efc0.jpg","sig_matcha_pist":"assets/img_055_cc9351c280.jpg","sig_matcha_mango_skewer":"assets/img_056_80a6142db2.webp","sig_matcha_van":"assets/img_057_4316bba490.webp","combo1":"assets/img_026_f0e54c5b1a.jpg"};
+
+
+// Estado global de la tienda
+let cart = [];
+let selectedDrink = null;
+let selectedSize = "12 oz";
+let selectedMilk = "Leche entera";
+let selectedBase = "Soda";
+let selectedSweet = "Normal";
+let selectedIce = "Normal";
+let selectedSurprise = null;
+let selectedOccasion = "Porque sí";
+let selectedSurpriseDrink = "Matcha de Fresa y Coco";
+let selectedColor = "Lila";
+let selectedMessage = "";
+
+const matchas=[
+{name:"Matcha de Fresa y Coco",d:"Matcha, fresa, coco y la leche de tu elección.",p12:15900,p20:20900,img:"matcha_fc"},
+{name:"Matcha de Pistacho y Chocolate Blanco",d:"Matcha, pistacho, chocolate blanco y la leche de tu elección.",p12:15900,p20:20900,img:"matcha_pist"},
+{name:"Matcha de Vainilla",d:"Matcha, vainilla y la leche de tu elección.",p12:14900,p20:19900,img:"matcha_van"},
+{name:"Matcha de Mango",d:"Matcha, mango y la leche de tu elección.",p12:15900,p20:20900,img:"matcha_mango"}
+];
+const bombaMatchas=[
+{name:"Bomba de Matcha de Fresa y Coco",d:"Matcha de fresa y coco en una versión con soda, fría y refrescante.",p12:15900,p20:20900,img:"bomba_straw"},
+{name:"Bomba de Matcha de Mango",d:"Matcha de mango en una versión con soda, fría y refrescante.",p12:15900,p20:20900,img:"bomba_mango"},
+{name:"Bomba de Matcha de Arándanos",d:"Matcha de arándanos en una versión con soda, fría y refrescante.",p12:15900,p20:20900,img:"bomba_blue"}
+];
+const coffees=[
+{name:"Café Frío de Vainilla",d:"Café frío de vainilla y la leche de tu elección.",p12:12900,p20:16900,img:"coffee_van"},
+{name:"Café Frío de Panela y Canela",d:"Café frío con panela y canela.",p12:12900,p20:16900,img:"coffee_panela"},
+{name:"Café Frío Original",d:"Café frío con leche y azúcar.",p12:12900,p20:16900,img:"coffee_original"}
+];
+const sodas=[
+{name:"Soda de Maracuyá y Mango",d:"Una soda frutal y refrescante.",p12:12900,p20:16900,img:"soda_mango"},
+{name:"Soda de Frutos Rojos",d:"Una soda frutal de frutos rojos.",p12:12900,p20:16900,img:"soda_red"},
+{name:"Soda Tropical",d:"Soda tropical de fresa y maracuyá.",p12:12900,p20:16900,img:"soda_tropical"}
+];
+const crowns=[
+["Croissant con azúcar glass",4900,"croissant_sugar"],["Croissant con chocolate blanco",4900,"croissant_white"],["Croissant con chocolate negro",4900,"croissant_dark"],["Croissant con crema de pistacho y chocolate blanco",4900,"croissant_pist"],["Croissant con crema de fresas",4900,"croissant_straw"],
+["Brownie clásico",6900,"brownie_classic"],["Brownie con chocolate negro",6900,"brownie_dark"],["Brownie con chocolate blanco",6900,"brownie_white"],["Brownie con pistacho",6900,"brownie_pist"],
+["Waffle de pandebono con suero costeño",5900,"waffle_suero"],["Waffle de pandebono con arequipe",5900,"waffle_arequipe"],["Waffle de pandebono con guayaba",5900,"waffle_guava"],["Waffle de pandebono con pistacho",5900,"waffle_pist"],
+["Brocheta Tropical — fresa, mango, uva verde",4900,"skewer_tropical"],["Brocheta de Frutos Rojos — fresa, arándanos, uva morada",4900,"skewer_red"],["Brocheta de Fresa, Uva y Mango",4900,"skewer_mix"]
+];
+const signatures=[
+["Matcha de Fresa y Coco","Waffle de pandebono con suero costeño",16900,20900,"sig_matcha_fc","waffle_suero"],
+["Matcha de Pistacho y Chocolate Blanco","Croissant con crema de pistacho y chocolate blanco",16900,20900,"sig_matcha_pist","croissant_pist"],
+["Café Frío de Vainilla","Croissant con azúcar glass",13900,16900,"sig_coffee_van","croissant_sugar"],
+["Café Frío de Panela y Canela","Croissant con chocolate blanco y canela",13900,16900,"sig_coffee_panela","croissant_white"],
+["Soda de Maracuyá y Mango","Brocheta de frutas",17900,24900,"sig_soda_mango","skewer_tropical"],
+["Soda de Frutos Rojos","Brownie",17900,24900,"sig_soda_red","brownie_classic"]
+];
+const combos=[
+["Combo 1","1 bebida + 3 Crowns",27900,"combo1"],
+["Combo 2","2 bebidas + 6 Crowns",57900,"combo2"],
+["Combo 3","4 bebidas + 9 Crowns",74900,"combo3"]
+];
+const surprises=[
+["Mini",45000,"Un detallito para ti","1 bebida 12 oz · 2 Crowns · porción de frutas · 1 globo pequeño · tarjeta · canastita pequeña","surprise_mini"],
+["Clásico",55000,"Buenos días, amor","1 bebida 20 oz · 3 Crowns · brocheta de frutas · 1 globo mediano · tarjeta · canastita mediana","surprise_classic"],
+["Especial",75000,"Hoy celebramos","1 bebida 20 oz · 4 Crowns · brocheta + fruta extra · 1 globo grande + 2 pequeños · tarjeta · canastita grande","surprise_special"]
+];
+function money(n){return "$"+n.toLocaleString("es-CO")}
+function go(id){
+ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ if(id==="s13") renderCart();
+ window.scrollTo(0,0);
+ updateCounts();
+}
+function toast(t){let x=document.getElementById("toast");x.textContent=t;x.style.display="block";setTimeout(()=>x.style.display="none",1800)}
+function updateCounts(){
+ const n=cart.reduce((a,x)=>a+x.qty,0);
+ document.querySelectorAll("[id^=cartCount]").forEach(x=>x.textContent=n);
+}
+function addCart(item){
+ cart.push({...item,qty:1});
+ updateCounts();toast("Producto agregado al pedido");
+}
+function productImage(x,type){
+ const key=x && x.img;
+ return key && PHOTOS[key] ? PHOTOS[key] : "";
+}
+function productCard(x,type){
+ const src=productImage(x,type);
+ return `<article class="product"><div class="product-img">${src?`<img src="${src}" alt="${x.name}">`:`<div class="photo-missing">Foto pendiente</div>`}<button class="heart">♡</button></div><div class="product-body"><h3>${x.name}</h3><p>${x.d}</p><div class="prices">12 oz <b>${x.p12?money(x.p12):"Precio pendiente"}</b><br>20 oz <b>${x.p20?money(x.p20):"Precio pendiente"}</b></div><button class="add" onclick='openDetail(${JSON.stringify(x).replace(/'/g,"&#39;")},"${type}")'>AGREGAR</button></div></article>`
+}
+function renderProducts(){
+ document.getElementById("matchaGrid").innerHTML=matchas.map(x=>productCard(x,"matcha")).join("");
+ document.getElementById("coffeeGrid").innerHTML=coffees.map(x=>productCard(x,"coffee")).join("");
+ document.getElementById("sodaGrid").innerHTML=sodas.map(x=>productCard(x,"soda")).join("");
+ document.getElementById("bombaGrid").innerHTML=bombaMatchas.map(x=>productCard(x,"bombamatcha")).join("");
+}
+function openDetail(x,type){
+ if(!x.p12){toast("El precio de este producto está pendiente.");return}
+ selectedDrink={...x,__type:type,__from:type==="matcha"?"s3":type==="coffee"?"s5":type==="soda"?"s6":"s14"};
+ selectedSize="12 oz";selectedMilk="Leche entera";selectedSweet="Normal";selectedIce="Normal";
+ document.getElementById("detailBox").innerHTML=`
+ <div class="kicker">${type}</div><h1 class="page">${x.name}</h1>
+ <div class="detail-img">${productImage(x,type)?`<img src="${productImage(x,type)}" alt="${x.name}">`:``}</div>
+ <div class="card">
+ <div class="option-label">Tamaño</div><div class="options">${["12 oz","20 oz"].map(v=>`<button class="opt ${v===selectedSize?"selected":""}" onclick="pick('size','${v}',this)">${v}</button>`).join("")}</div>
+ ${type!=="bombamatcha"?`<div class="option-label">Leche</div><div class="options">${["Leche lactosa","Leche entera","Leche de avena","Leche de coco","Leche de almendras"].map(v=>`<button class="opt ${v===selectedMilk?"selected":""}" onclick="pick('milk','${v}',this)">${v}</button>`).join("")}</div>`:`<div class="option-label">Base</div><div class="notice" style="margin-bottom:15px">Soda · sin leche</div>`}
+
+ <div class="option-label">Dulzor</div><div class="options">${["Normal","Poco dulce","Sin azúcar"].map(v=>`<button class="opt ${v===selectedSweet?"selected":""}" onclick="pick('sweet','${v}',this)">${v}</button>`).join("")}</div>
+ <div class="option-label">Hielo</div><div class="options">${["Normal","Poco hielo","Sin hielo"].map(v=>`<button class="opt ${v===selectedIce?"selected":""}" onclick="pick('ice','${v}',this)">${v}</button>`).join("")}</div>
+ <div class="option-label">Cantidad</div><div class="qty"><button onclick="detailQty(-1)">−</button><span id="detailQty">1</span><button onclick="detailQty(1)">+</button></div>
+ <div class="big-price" id="detailPrice">${money(x.p12)}</div>
+ <button class="btn primary full" onclick="addDetail()">AGREGAR AL PEDIDO</button>
+ </div>`;
+ go("s4");
+}
+let detailQuantity=1;
+function detailQty(d){detailQuantity=Math.max(1,detailQuantity+d);document.getElementById("detailQty").textContent=detailQuantity}
+function pick(k,v,el){
+ if(k==="size")selectedSize=v;if(k==="milk")selectedMilk=v;if(k==="base")selectedBase=v;if(k==="sweet")selectedSweet=v;if(k==="ice")selectedIce=v;
+ el.parentElement.querySelectorAll(".opt").forEach(b=>b.classList.remove("selected"));el.classList.add("selected");
+ if(k==="size"){document.getElementById("detailPrice").textContent=money(v==="12 oz"?selectedDrink.p12:selectedDrink.p20)}
+}
+function addDetail(){
+ const price=selectedSize==="12 oz"?selectedDrink.p12:selectedDrink.p20;
+ cart.push({name:selectedDrink.name,detail:`${selectedSize} · ${selectedDrink.__type==="bombamatcha"?"Soda · sin leche":selectedMilk+" · Con leche"} · ${selectedSweet} · ${selectedIce}`,price,qty:detailQuantity});
+ detailQuantity=1;updateCounts();renderCart();toast("Producto agregado al pedido");go("s13");
+}
+function initMenuFilters(){
+ const filters=document.querySelectorAll(".menu-filters .filter");
+ filters.forEach(btn=>{
+   btn.addEventListener("click",()=>{
+     filters.forEach(b=>b.classList.remove("active"));
+     btn.classList.add("active");
+     const target=btn.dataset.target;
+     if(target==="all"){
+       window.scrollTo({top:0,behavior:"smooth"});
+       return;
+     }
+     go(target);
+   });
+ });
+}
+function renderMenu(){
+ const cats=[
+ ["BOMBA DE MATCHA","Matcha con soda, frío, frutal y refrescante.","s14","cat_bomba"],
+ ["MATCHA","Bebidas frescas, cremosas y llenas de sabor.","s3","cat_matcha"],
+ ["CAFÉ FRÍO","Tu café favorito en versión fría.","s5","cat_coffee"],
+ ["SODAS","Frutales, refrescantes y únicas.","s6","cat_soda"],
+ ["SIGNATURE","Nuestras combinaciones de bebida + Crown.","s8","cat_signature"],
+ ["CROWNS","Postres irresistibles para acompañar.","s7","cat_crowns"],
+ ["COMBOS","Tu bebida + Crowns para compartir.","s9","cat_combos"],
+ ["SURPRISES","Detalles para regalar, celebrar o simplemente sorprender.","s10","cat_surprises"],
+ ["EVENTOS","Llevamos MONÉA a tus celebraciones.","s12","cat_event"]
+ ];
+ document.getElementById("menuCats").innerHTML=cats.map(c=>`<div class="category-row" onclick="go('${c[2]}')"><div class="cat-img"><img src="${PHOTOS[c[3]]}" alt="${c[0]}"></div><div><h3>${c[0]}</h3><p>${c[1]}</p></div><div class="arrow">›</div></div>`).join("");
+}
+function renderCrowns(){
+ document.getElementById("crownsGrid").innerHTML=`<div class="grid2">${crowns.map(x=>`<article class="product"><div class="product-img"><img src="${PHOTOS[x[2]]}" alt="${x[0]}"></div><div class="product-body"><h3>${x[0]}</h3><div class="price-big">${money(x[1])}</div><button class="add" onclick='addCart({name:${JSON.stringify(x[0])},detail:"Crown · 1 unidad",price:${x[1]},img:${JSON.stringify(x[2])}});go("s13")'>AGREGAR</button></div></article>`).join("")}</div><div class="card" style="margin-top:16px"><div class="section-title"><strong>Crown Boxes</strong></div>${[["×3",18900],["×6",34900],["×9",49900]].map(x=>`<div class="row"><span>Box ${x[0]}</span><b>${money(x[1])}</b><button class="add" style="width:auto;margin:0 0 0 8px" onclick='addCart({name:"Crown Box ${x[0]}",detail:"Caja de Crowns",price:${x[1]},img:"croissant_sugar"});go("s13")'>AGREGAR</button></div>`).join("")}</div>`;
+}
+function renderSignature(){
+ document.getElementById("signatureGrid").innerHTML=signatures.map(x=>`<article class="card"><div class="combo-img"><img src="${PHOTOS[x[4]]}" alt="${x[0]} Signature"></div><span class="tag">SIGNATURE</span><h3 style="margin:0;color:var(--green);font-size:15px">${x[0]}</h3><p class="sub" style="margin:5px 0">${x[1]}</p><div class="prices">12 oz <b>${money(x[2])}</b> · 20 oz <b>${money(x[3])}</b></div><button class="add" onclick='addCart({name:${JSON.stringify(x[0]+" Signature")},detail:${JSON.stringify("Bebida + "+x[1])},price:${x[2]},img:${JSON.stringify(x[4])}});go("s13")'>AGREGAR</button></article>`).join("");
+}
+let selectedCombo=null;
+let comboDrinks=[];
+let comboCrowns=[];
+function renderCombos(){
+ document.getElementById("comboGrid").innerHTML=combos.map((x,i)=>`<article class="card"><div class="combo-img"><img src="${PHOTOS[x[3]]}" alt="${x[0]}"></div><span class="tag">${x[0]}</span><h3 style="margin:0;color:var(--green)">${x[1]}</h3><div class="price-big">${money(x[2])}</div><p class="sub">Entra y elige exactamente qué bebidas y Crowns quieres.</p><button class="add" onclick="openCombo(${i})">ELEGIR MI COMBO</button></article>`).join("");
+}
+function openCombo(i){
+ selectedCombo=combos[i]; const drinkQty=selectedCombo[0]==="Combo 1"?1:selectedCombo[0]==="Combo 2"?2:4; const crownQty=selectedCombo[0]==="Combo 1"?3:selectedCombo[0]==="Combo 2"?6:9; comboDrinks=Array.from({length:drinkQty},()=>({name:"",size:"12 oz"})); comboCrowns=[];
+ const drinks=[...matchas,...bombaMatchas,...coffees,...sodas];
+ document.getElementById("comboGrid").innerHTML=`<div class="card combo-builder"><div class="kicker">${selectedCombo[0].toUpperCase()}</div><h2 style="margin:4px 0 5px;color:var(--green)">Arma tu combo</h2><p class="sub">Elige ${drinkQty} bebida${drinkQty>1?"s":""} y ${crownQty} Crowns.</p><div id="comboDrinkChoices">${comboDrinks.map((d,j)=>`<div class="combo-choice"><label>Bebida ${j+1}</label><select onchange="comboDrinks[${j}].name=this.value"><option value="">Selecciona una bebida</option>${drinks.map(x=>`<option>${x.name}</option>`).join("")}</select><select onchange="comboDrinks[${j}].size=this.value"><option>12 oz</option><option>20 oz</option></select></div>`).join("")}</div><label style="display:block;margin-top:18px;font-weight:800;color:var(--green)">Crowns · selecciona ${crownQty}</label><div class="options combo-crowns">${crowns.map((x,j)=>`<button class="opt" onclick="toggleComboCrown(${j},${crownQty},this)">${x[0]}</button>`).join("")}</div><div class="summary-box" id="comboSummary">Aún no has elegido tus Crowns.</div><button class="btn primary full" onclick="addComboToCart()">AGREGAR AL PEDIDO</button><button class="btn secondary full" onclick="renderCombos()">VOLVER A COMBOS</button></div>`;
+}
+function toggleComboCrown(index,max,el){ const pos=comboCrowns.indexOf(index); if(pos>=0){comboCrowns.splice(pos,1);el.classList.remove("selected")} else if(comboCrowns.length<max){comboCrowns.push(index);el.classList.add("selected")} document.getElementById("comboSummary").innerHTML=`<b>Crowns:</b> ${comboCrowns.length}/${max}${comboCrowns.length?"<br>"+comboCrowns.map(i=>crowns[i][0]).join(" · "):""}`; }
+function addComboToCart(){ const drinkQty=selectedCombo[0]==="Combo 1"?1:selectedCombo[0]==="Combo 2"?2:4; const crownQty=selectedCombo[0]==="Combo 1"?3:selectedCombo[0]==="Combo 2"?6:9; if(comboDrinks.some(d=>!d.name)){toast("Selecciona todas las bebidas");return} if(comboCrowns.length!==crownQty){toast(`Selecciona exactamente ${crownQty} Crowns`);return} const drinkText=comboDrinks.map(d=>`${d.name} ${d.size}`).join(" + "); const crownText=comboCrowns.map(i=>crowns[i][0]).join(" + "); cart.push({name:selectedCombo[0],detail:`Bebidas: ${drinkText} · Crowns: ${crownText}`,price:selectedCombo[2],qty:1,img:selectedCombo[3]}); updateCounts();toast("Combo agregado al pedido");go("s13"); }
+function renderSurprises(){
+ document.getElementById("surpriseGrid").innerHTML=surprises.map((x,i)=>`<article class="card surprise-card">
+   <button type="button" class="surprise-open" onclick="openSurprise(${i})" aria-label="Ver Surprise ${x[0]}">
+     <div class="surprise-img"><img src="${PHOTOS[x[4]]}" alt="Surprise ${x[0]}"></div>
+   </button>
+   <span class="tag">${x[0]}</span>
+   <h3 style="margin:0;color:var(--green);font-size:18px">${x[2]}</h3>
+   <p class="sub" style="margin:7px 0">${x[3]}</p>
+   <div class="price-big">${money(x[1])}</div>
+   <button class="add" type="button" onclick="openSurprise(${i})">PERSONALIZAR</button>
+ </article>`).join("");
+}
+function openSurprise(i){
+ const item=surprises[Number(i)];
+ if(!item) return;
+ selectedSurprise=item;
+ selectedOccasion="Porque sí";
+ selectedSurpriseDrink="Matcha de Fresa y Coco";
+ selectedColor="Lila";
+ selectedMessage="";
+ renderSurpriseCustomize();
+ go("s11");
+}
+function renderSurpriseCustomize(){
+ const qty=selectedSurprise[0]==="Mini"?2:selectedSurprise[0]==="Clásico"?3:4;
+ const drinkOptions=[...matchas,...coffees,...sodas].map(x=>x.name);
+ document.getElementById("surpriseCustomize").innerHTML=`
+ <div class="kicker">SURPRISE · ${selectedSurprise[0].toUpperCase()}</div><h1 class="page">Personaliza tu Surprise</h1><p class="sub">${selectedSurprise[2]}</p>
+ <button type="button" class="surprise-open" onclick="openSurprise(${surprises.indexOf(selectedSurprise)})" aria-label="Ver imagen de Surprise ${selectedSurprise[0]}"><div class="surprise-img"><img src="${PHOTOS[selectedSurprise[4]]}" alt="Surprise ${selectedSurprise[0]}"></div></button>
+ <div class="card"><div class="form">
+ <label>Ocasión</label><select id="occasion" onchange="selectedOccasion=this.value"><option>Amor</option><option>Cumpleaños</option><option>Para mi novio/a</option><option>Aniversario</option><option>Buenos días</option><option>Gracias</option><option>Celebración</option><option selected>Porque sí</option><option>Otra</option></select>
+ <label>Bebida</label><select id="sdrink" onchange="selectedSurpriseDrink=this.value">${drinkOptions.map(x=>`<option ${x===selectedSurpriseDrink?"selected":""}>${x}</option>`).join("")}</select>
+ <label>Crowns · elige ${qty}</label><div class="options">${crowns.map(x=>`<button class="opt" onclick="this.classList.toggle('selected')">${x[0]}</button>`).join("")}</div>
+ <label>Color coordinado · moño + globos + papel decorativo</label>
+ <div class="color-grid">${[["Lila","#B99BE8"],["Rosado","#E9A6B8"],["Blanco","#fff"],["Verde","#A9B98A"],["Borgoña","#70263D"],["Azul","#9BBCE8"],["Negro","#222"]].map(x=>`<button class="color ${x[0]===selectedColor?"sel":""}" title="${x[0]}" style="background:${x[1]}" onclick="selectedColor='${x[0]}';this.parentElement.querySelectorAll('.color').forEach(b=>b.classList.remove('sel'));this.classList.add('sel')"></button>`).join("")}</div>
+ <label>Mensaje para la tarjeta · máximo 100 caracteres</label><textarea id="smessage" maxlength="100" oninput="selectedMessage=this.value" placeholder="Escribe tu mensaje..."></textarea>
+ </div>
+ <div class="summary-box"><b>${selectedSurprise[0]}</b><br>${selectedSurprise[3]}<br><br><b>Color:</b> ${selectedColor}<br><b>Ocasión:</b> ${selectedOccasion}</div>
+ <button class="btn primary full" style="margin-top:13px" onclick="addSurpriseToCart()">AGREGAR AL PEDIDO</button></div>`;
+}
+function addSurpriseToCart(){
+ const qty=selectedSurprise[0]==="Mini"?2:selectedSurprise[0]==="Clásico"?3:4;
+ const selectedCrowns=[...document.querySelectorAll("#surpriseCustomize .opt.selected")].map(x=>x.textContent);
+ if(selectedCrowns.length!==qty){toast(`Selecciona exactamente ${qty} Crowns`);return}
+ cart.push({name:`Surprise ${selectedSurprise[0]}`,detail:`${selectedOccasion} · ${selectedSurpriseDrink} · ${selectedCrowns.join(" + ")} · ${selectedColor} · Tarjeta: ${selectedMessage||"Sin mensaje"}`,price:selectedSurprise[1],qty:1,img:selectedSurprise[4]});
+ updateCounts();toast("Surprise agregado al pedido");go("s13");
+}
+
+function imageForCartItem(x){
+ if(x.img && PHOTOS[x.img]) return PHOTOS[x.img];
+ const n=(x.name||"").toLowerCase();
+ const all=[...matchas,...bombaMatchas,...coffees,...sodas];
+ const drink=all.find(d=>n.includes(d.name.toLowerCase()));
+ if(drink) return productImage(drink,drink.name.includes("Bomba")?"bombamatcha":drink.name.includes("Café")?"coffee":drink.name.includes("Soda")?"soda":"matcha");
+ const crown=crowns.find(c=>n.includes(c[0].toLowerCase()));
+ return crown?PHOTOS[crown[2]]:PHOTOS.croissant_sugar;
+}
+function renderCart(){
+ const box=document.getElementById("cartItems");
+ const summary=document.getElementById("cartSummary");
+
+ // Always render from the same cart array used by the add-to-cart actions.
+ if (!Array.isArray(cart) || cart.length === 0) {
+   box.innerHTML = `<div class="card" style="text-align:center;padding:35px 20px">
+     <h2 style="font:700 24px Georgia;color:var(--green);margin:0 0 7px">Tu pedido está vacío</h2>
+     <p class="sub">Agrega tus bebidas, Crowns o Surprises favoritas.</p>
+     <button class="btn primary" onclick="go('s2')">VER MENÚ</button>
+   </div>`;
+   summary.innerHTML = "";
+   return;
+ }
+
+ box.innerHTML = cart.map((x,i) => `
+   <div class="card">
+     <div class="cart-item">
+       <div class="cart-pic"><img src="${imageForCartItem(x)}" alt="${x.name||"Producto MONÉA"}"></div>
+       <div class="cart-info">
+         <div class="cart-name">${x.name || "Producto MONÉA"}</div>
+         <div class="cart-detail">${x.detail || ""}</div>
+         <div class="cart-price">${money(Number(x.price) || 0)}</div>
+         <div class="cart-actions">
+           <button onclick="changeCart(${i},-1)">−</button>
+           <span>${Number(x.qty) || 1}</span>
+           <button onclick="changeCart(${i},1)">+</button>
+           <button class="remove" onclick="removeCart(${i})">Eliminar</button>
+         </div>
+       </div>
+     </div>
+   </div>`).join("");
+
+ const total = cart.reduce((a,x) => a + (Number(x.price)||0) * (Number(x.qty)||1), 0);
+ summary.innerHTML = `
+   <div class="section-title"><strong>Resumen del pedido</strong></div>
+   <div class="row"><span>Subtotal</span><b>${money(total)}</b></div>
+   <div class="row"><span>Domicilio</span><b>Por confirmar</b></div>
+   <div class="row total"><span>Total estimado</span><b>${money(total)}</b></div>`;
+}
+function changeCart(i,d){
+ if(!cart[i]) return;
+ cart[i].qty=Math.max(1,(Number(cart[i].qty)||1)+d);
+ renderCart();
+ updateCounts();
+}
+function removeCart(i){
+ if(i<0 || i>=cart.length) return;
+ cart.splice(i,1);
+ renderCart();
+ updateCounts();
+}
+function sendOrder(){
+ if(!cart.length){toast("Agrega al menos un producto");return}
+ const total=cart.reduce((a,x)=>a+x.price*x.qty,0);
+ let msg="Hola MONÉA, quiero generar este pedido:%0A%0A";
+ cart.forEach((x,i)=>{msg+=`${i+1}. ${x.name} x${x.qty}%0A${x.detail}%0A${money(x.price*x.qty)}%0A%0A`});
+ msg+=`Subtotal: ${money(total)}%0ADomicilio: por confirmar%0ATotal estimado: ${money(total)}%0A%0AQuiero confirmar disponibilidad y domicilio.`;
+ const number=WHATSAPP_NUMBER.replace(/\D/g,"");
+ if(!number){toast("Número de WhatsApp no configurado.");return}
+ window.open(`https://wa.me/${number}?text=${msg}`,"_blank");
+}
+function sendEvent(){
+ const inputs=[...document.querySelectorAll("#s12 input,#s12 textarea")].map(x=>x.value);
+ const msg=`Hola MONÉA, quiero información para un evento.%0A%0ANombre: ${inputs[0]}%0ATipo de evento: ${inputs[1]}%0AFecha: ${inputs[2]}%0AInvitados: ${inputs[3]}%0ANecesito: ${inputs[4]}`;
+ const number=WHATSAPP_NUMBER.replace(/\D/g,"");
+ if(!number){toast("Número de WhatsApp no configurado.");return}
+ window.open(`https://wa.me/${number}?text=${msg}`,"_blank");
+}
+renderMenu();renderProducts();renderCrowns();renderSignature();renderCombos();renderSurprises();renderCart();initMenuFilters();updateCounts();
+</script>
+
+<div id="moneaLightboxV22" aria-hidden="true">
+  <button type="button" aria-label="Cerrar">×</button>
+  <img alt="Fotografía completa MONÉA">
+  <div class="lb-label"></div>
+</div>
+<script>
+(function(){
+  function setup(){
+    var root=document.getElementById('moneaLightboxV22');
+    if(!root) return;
+    var big=root.querySelector('img'), label=root.querySelector('.lb-label'), close=root.querySelector('button');
+    function show(img){
+      if(!img || !img.src || img.src.indexOf('data:image')!==0) return false;
+      big.src=img.src;
+      big.alt=img.alt||'Fotografía MONÉA';
+      label.textContent=img.alt||'MONÉA';
+      root.classList.add('open');
+      root.setAttribute('aria-hidden','false');
+      return true;
+    }
+    function hide(){
+      root.classList.remove('open');
+      root.setAttribute('aria-hidden','true');
+      big.removeAttribute('src');
+    }
+    // Delegación: funciona también después de que el menú vuelva a renderizar sus tarjetas.
+    document.addEventListener('click',function(e){
+      var img=e.target.closest && e.target.closest('.product-img img,.detail-img img,.combo-img img,.surprise-img img,.event-img img,.cat-img img,.cart-pic img');
+      if(!img) return;
+      if(show(img)){
+        e.preventDefault();
+        e.stopPropagation();
+        if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+      }
+    },true);
+    close.onclick=function(e){e.preventDefault();e.stopPropagation();hide();};
+    root.addEventListener('click',function(e){if(e.target===root) hide();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape') hide();});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup); else setup();
+})();
+</script>
+
+</body>
+</html>
